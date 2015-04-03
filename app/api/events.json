@@ -1,0 +1,6 @@
+[
+  {"id": 1, "date": "2015-03-20", "latitude": -36.663196, "longitude": -56.6851943, "address": "Maipu 122"},
+  {"id": 2, "date": "2014-12-24", "latitude": -36.662650, "longitude": -56.682716, "address": "Rioja 45"},
+  {"id": 3, "date": "2015-02-12", "latitude":  -36.659941884616956, "longitude": -56.68172836303711, "address": "Salta 3434"},
+  {"id": 4, "date": "2015-01-22", "latitude": -36.66128450253036, "longitude": -56.68423891067505, "address": "Córdoba 2323"}
+]

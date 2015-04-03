@@ -1,3 +1,12 @@
+# securitymap - An application to publish a map of events related to home security
+This applications is intended to develop a Map for La Lucila del March beach in Argentina.
+
+Future development will allow this to be a general application to create security maps for any configured place.
+
+Contact author for more information.
+
+Note: Current version is in Spanish only.
+
 # angular-seed — the seed for AngularJS apps
 
 This project is an application skeleton for a typical [AngularJS](http://angularjs.org/) web app.
@@ -95,8 +104,8 @@ app/                    --> all of the source files for the application
     home_test.js         --> tests of the controller
   list/                --> the list view template and logic
     list.html            --> the partial template
-    contact.js              --> the controller logic
-    contact_test.js         --> tests of the controller
+    report.js              --> the controller logic
+    report_test.js         --> tests of the controller
   app.js                --> main application module
   index.html            --> app layout file (the main html template file of the app)
   index-async.html      --> just like index.html, but loads js files asynchronously

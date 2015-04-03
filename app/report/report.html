@@ -1,0 +1,72 @@
+<h2>Reportá un delito</h2>
+<p>Por favor ingresá la información solicitada en el siguiente formulario.</p>
+
+<blockquote>El informar un delito en esta página NO representa una denuncia formal. Si no lo hiciste ya,
+acercate a la autoridad policial mas cercana a la dirección del hecho y realizá la denuncia.</blockquote>
+<blockquote>
+<p>Nota: La veracidad de la información publicada es responsabilidad del denunciante. Es posible que tu
+denuncia no sea publicada si encontramos algún inconveniente con la misma. En cualquier caso comunicate
+con nosotros y te comentaremos del inconveniente.</p>
+</blockquote>
+<form>
+	<div class="row">
+		<div class="col-md-8">
+			<div class="form-group">
+				<label for="address">Dirección del hecho (calle y número)</label>
+				<input type="text" class="form-control" id="address" placeholder="¿Dónde sucedió?" ng-model="complaint.address" ng-blur="addressChange()"/>
+			</div>
+			<div class="form-group">
+				<label for="locality">Localidad</label>
+				<input type="text" class="form-control" id="locality" placeholder="¿En qué localidad?" ng-model="complaint.locality" ng-blur="addressChange()"/>
+			</div>
+			<div class="form-group">
+				<label for="date">Fecha</label>
+				<input type="date" class="form-control" id="date" placeholder="¿Qué día?" ng-model="complaint.date"/>
+			</div>
+			<div class="form-group">
+				<label for="time">Hora aproximada (no obligatorio)</label>
+				<input type="time" class="form-control" id="time" placeholder="¿A que hora?" ng-model="complaint.time"/>
+			</div>
+			<div class="form-group">
+				<label for="type">Tipo de hecho</label>
+				<select id="type" class="form-control" ng-model="complaint.time" >
+					<option value="hurto">Hurto (no estaban presentes)</option>
+					<option value="robo">Robo (estaban ustedes)</option>
+					<option value="asalto">Robo a mano armada (tenían un revolver, cuchillo)</option>
+					<option value="violencia">Robo con violencia (golpes y otros)</option>
+					<option value="otros">Otros actos no enumerados</option>
+				</select>
+			</div>
+			<div class="form-group">
+				<label for="details">Detalles adicionales (no obligatorio)</label>
+				<textarea type="text" class="form-control" rows="10" id="details" placeholder="Detalles" ng-model="complaint.details"></textarea>
+			</div>
+		</div>
+		<div class="col-md-4">
+			<div class="alert alert-danger" role="alert" ng-if="error">{{error}}</div>
+			<div id="complaint_map_canvas" style="width: 300px; height: 500px" class="img-thumbnail"></div>
+		</div>
+	</div>
+
+	<p class="alert alert-success">Tus datos personales no aparecerán en el mapa. Serán utilizados para verificar la denuncia y para
+		ponernos en contacto contigo.</p>
+
+	<div class="form-group">
+		<label for="name">Tu nombre y apellido</label>
+		<input type="text" class="form-control" id="name" placeholder="¿Cómo te llamás?" ng-model="complaint.complainant.name"/>
+	</div>
+	<div class="form-group">
+		<label for="phone">Un número de teléfono (opcional)</label>
+		<input type="text" class="form-control" id="phone" placeholder="¿Dónde te podemos llamar?" ng-model="complaint.complainant.phone"/>
+	</div>
+	<div class="form-group">
+		<label for="email">Tu dirección de correo</label>
+		<input type="email" class="form-control" id="email" placeholder="Ingrese su dirección de correo" ng-model="complaint.complainant.email"/>
+	</div>
+	<div class="form-group">
+		<label for="comments">Comentarios adicionales (no publicados)</label>
+		<textarea type="text" class="form-control" rows="10" id="comments" placeholder="Indique que desea comunicarnos" ng-model="complaint.comments"></textarea>
+	</div>
+	<div class="g-recaptcha" data-sitekey="6LdUNOYSAAAAANdmj5Ze1eHfzeKHGHcEncmhbLS8"></div>
+	<button type="submit" class="btn btn-default">Enviar</button>
+</form>

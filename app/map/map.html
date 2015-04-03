@@ -15,9 +15,9 @@
 		</div>
 		<div class="col-md-10">
 			<div class="alert alert-warning" role="alert" ng-if="error" class="animate-if">{{error}}</div>
-			<h2>Mapa de los delitos <button class="btn btn-primary" type="button">Informá de un evento</button>
-			</h2>
-			<div id="map_canvas" style="width: 100%; height: 500px"></div>
+			<button class="btn btn-primary pull-right" type="button" ng-click="reportAComplaint()">Reportá un delito</button>
+			<h2>Mapa de los delitos</h2>
+			<div id="map_canvas" style="width: 100%; height: 500px"  class="img-thumbnail"></div>
 		</div>
 	</div>
 </div>

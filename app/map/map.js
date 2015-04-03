@@ -9,7 +9,7 @@ angular.module('secMapApp.map', ['ngRoute'])
   });
 }])
 
-.controller('MapCtrl', ['$scope', '$http', function($scope, $http) {
+.controller('MapCtrl', ['$scope', '$http', '$location', function($scope, $http, $location) {
 		var image = new google.maps.MarkerImage('images/thieft2.png',
 			// This marker is 20 pixels wide by 32 pixels tall.
 			new google.maps.Size(48, 48),
@@ -98,6 +98,10 @@ angular.module('secMapApp.map', ['ngRoute'])
 		$scope.markers = [];
 		$scope.filterChange = function() {
 			requestAll();
+		};
+
+		$scope.reportAComplaint = function() {
+			$location.path("/report")
 		};
 
 		// https://developers.google.com/maps/documentation/javascript/overlays

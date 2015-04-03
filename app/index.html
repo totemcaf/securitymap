@@ -24,8 +24,10 @@
 
 	<!-- Latest compiled and minified JavaScript -->	<!--<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>-->
 	<script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?&sensor=false&&language=es"></script>
+
+	<script src='https://www.google.com/recaptcha/api.js'></script>
 </head>
-<body>
+<body class="with-footer" ng-controller="appController">
 <nav class="navbar navbar-inverse navbar-fixed-top">
 	<div class="container">
 		<div class="navbar-header">
@@ -35,11 +37,11 @@
 			<a class="navbar-brand" href="#">Mapa de Seguridad (y el crimen)</a>
 		</div>
 		<div id="navbar" class="collapse navbar-collapse">
-			<ul class="nav navbar-nav">
-				<li class="active"><a href="#/home">Inicio</a></li>
+			<ul class="nav navbar-nav" id="menu-items">
+				<li><a href="#/home">Inicio</a></li>
 				<li><a href="#/map">Mapa</a></li>
 				<li><a href="#/list">Listado</a></li>
-				<li><a href="#/about">Acerca de</a></li>
+				<li><a href="#/report">Reportá</a></li>
 				<li><a href="#/contact">Contacto</a></li>
 			</ul>
 		</div>
@@ -71,6 +73,7 @@
 <script src="home/home.js"></script>
 <script src="map/map.js"></script>
 <script src="list/list.js"></script>
+<script src="report/report.js"></script>
 <script src="contact/contact.js"></script>
 <script src="components/version/version.js"></script>
 <script src="components/version/version-directive.js"></script>

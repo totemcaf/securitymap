@@ -3,6 +3,7 @@
 // Declare app level module which depends on views, and components
 angular.module('secMapApp', [
   'ngRoute',
+  'ngResource',
   'secMapApp.home',
   'secMapApp.map',
   'secMapApp.list',
@@ -13,6 +14,19 @@ angular.module('secMapApp', [
 config(['$routeProvider', function($routeProvider) {
   $routeProvider.otherwise({redirectTo: '/home'});
 }])
+
+.factory('Complaints', ['$resource',
+	function($resource) {
+		return $resource('api/complaints.json?id=:id&filters=:filters&bounds=:bounds',
+			{id: '@id'},
+			{
+				findAll: {method:'GET', params:{}, isArray:true},
+				find: {method:'GET', params:{}, isArray:true}
+			}
+		);
+	}
+])
+
 .controller('appController',['$scope', '$rootScope',
 	function($scope, $rootScope) {
 		$rootScope.$on("$locationChangeStart", function(event, next, current) {
@@ -26,5 +40,6 @@ config(['$routeProvider', function($routeProvider) {
 			}
 		});
 	}]
-);
+)
+;
 

@@ -9,7 +9,7 @@ angular.module('secMapApp.map', ['ngRoute'])
   });
 }])
 
-.controller('MapCtrl', ['$scope', '$http', '$location', function($scope, $http, $location) {
+.controller('MapCtrl', ['$scope', 'Complaints', '$location', function($scope, Complaints, $location) {
 		var image = new google.maps.MarkerImage('images/thieft2.png',
 			// This marker is 20 pixels wide by 32 pixels tall.
 			new google.maps.Size(48, 48),
@@ -48,7 +48,7 @@ angular.module('secMapApp.map', ['ngRoute'])
 
 		function makeDateFilters(events) {
 			var years = {};
-			for (var i in events) {
+			for (var el = events.length, i = 0; i < el; i++) {
 				var event = events[i];
 				years[event.date.substring(0, 4)] = true;
 			}
@@ -63,27 +63,26 @@ angular.module('secMapApp.map', ['ngRoute'])
 		}
 
 		function requestAll() {
-			$http.get('api/events.json').
-				success(function (data, status, headers, config) {
+			Complaints.findAll({},
+				function (data, headers) {
 					// Remove old markers
 					var markers = $scope.markers;
-					for (var i in markers)
+					for (var ml = markers.length, i = 0; i < ml; i++)
 						markers[i].setMap(null);
 
 					$scope.markers = markers = [];
 
 					// Add new markers
-					for (var i in data)
+					for (var dl = data.length, i = 0; i < dl; i++)
 						markers.push(makeMarker(data[i], $scope.map));
 
 					if (!$scope.filters)
 						$scope.filters = makeDateFilters(data);     // Update existent, if not, new values are not added
-				}).
-				error(function (data, status, headers, config) {
-					// called asynchronously if an error occurs
-					// or server returns response with an error status.
-					$scope.error = status;
-				});
+				},
+				function (httpResponse) {
+					$scope.error = httpResponse;
+				}
+			);
 		}
 
 		var laLucilaCentro = new google.maps.LatLng(-36.661505, -56.683145);

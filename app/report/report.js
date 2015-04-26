@@ -1,3 +1,6 @@
+/**
+ * http://sixrevisions.com/javascript/changes-in-angularjs-1-3/
+ */
 'use strict';
 
 angular.module('secMapApp.report', ['ngRoute'])
@@ -9,7 +12,25 @@ angular.module('secMapApp.report', ['ngRoute'])
 		});
 }])
 
-.controller('Report2Ctrl', ['$scope', function($scope) {
+.directive('focusOn', function() {
+	return {
+		restrict: 'A',
+		scope: {
+			focusValue: "=focusOn"
+		},
+		link: function($scope, $element, attrs) {
+			$scope.$watch("focusValue", function(currentValue, previousValue) {
+				if (currentValue === true && !previousValue) {
+					$element[0].focus();
+
+					$scope.focusValue = false;
+				}
+			})
+		}
+	}
+})
+
+.controller('Report2Ctrl', ['$scope', 'Complaints', 'vcRecaptchaService', function($scope, Complaints, vcRecaptchaService) {
 	var geocoder = new google.maps.Geocoder();
 
 	var laLucilaDowntown = new google.maps.LatLng(-36.661505, -56.683145);
@@ -65,23 +86,23 @@ angular.module('secMapApp.report', ['ngRoute'])
 		return defaultLocality;
 	}
 
-	function addressChanged() {
-		var complaint = $scope.complaint;
-		if (complaint.address !== $scope.old_address || complaint.locality !== $scope.old_locality) {
-			$scope.old_address = complaint.address;
-			$scope.old_locality = complaint.locality;
 
-			return true;
+	$scope.$watchGroup(['complaint.address', 'complaint.locality'], function(newValues, oldValues, scope) {
+		function addressChanged(complaint) {
+			if (complaint.address.toLowerCase() != scope.old_address || complaint.locality.toLowerCase() != scope.old_locality) {
+				scope.old_address = complaint.address.toLowerCase();
+				scope.old_locality = complaint.locality.toLowerCase();
+
+				return true;
+			}
+			return false;
 		}
-		return false;
-	}
 
+		var complaint = $scope.complaint;
 
-	$scope.addressChange = function() {
-		if (!addressChanged())
+		if (newValues === oldValues || !addressChanged(complaint))
 			return;
 
-		var complaint = $scope.complaint;
 		var request = {
 			address: complaint.address,
 			bounds: bounds,
@@ -97,14 +118,14 @@ angular.module('secMapApp.report', ['ngRoute'])
 				if (scope.marker)
 					scope.marker.setMap(null);
 				if (status == google.maps.GeocoderStatus.ZERO_RESULTS) {
-					scope.error = 'No encuentro la dirección ' + complaint.address + ' en ' + complaint.locality
+					scope.error = 'No encuentro la dirección ' + request.address + ' en ' + complaint.locality
 					+ '. Por favor revisa si es correcta.';
 				} else if (status == google.maps.GeocoderStatus.OVER_QUERY_LIMIT) {
 					scope.error = 'Se han realizado demasiados pedidos hoy. Por favor reintento dentro de un rato.';
 				} else if (status != google.maps.GeocoderStatus.OK) {
 					scope.error = 'Hubo un problema al buscar la dirección ' + status;
 				} else if (!addressFound(results[0])) {
-					scope.error = 'No encuentro la dirección ' + complaint.address + ' en ' + complaint.locality
+					scope.error = 'No encuentro la dirección ' + request.address + ' en ' + complaint.locality
 					+ '. Por favor revisa si es correcta.';
 					} else {
 						var location = results[0].geometry.location;
@@ -116,11 +137,81 @@ angular.module('secMapApp.report', ['ngRoute'])
 							position: location
 						});
 						scope.complaint.locality = extractLocality(results[0], scope.complaint.locality);
+						scope.old_locality = scope.complaint.locality;
 						scope.complaint.location.latitude = location.lat();
 						scope.complaint.location.longitude = location.lng();
 						delete scope.error;
 					}
 			});
 		});
-	}
+
+	});
+
+	$scope.submitting = false;
+	$scope.submitted = false;
+	$scope.submit = function() {
+
+		var complaint = $scope.complaint;
+
+		$scope.submitting = true;
+		delete $scope.errorPost;
+
+		var c = new Complaints(complaint);
+		c.$save(
+			function() {
+				$scope.submitting = false;
+				$scope.submitted = true;
+				$scope.success = true;
+			},
+			function(data, status) {
+				$scope.submitting = false;
+				$scope.errorPost = status;
+				vcRecaptchaService.reload($scope.widgetId);
+			});
+	};
+
+	$scope.resetForAnother = function() {
+		var complaint = $scope.complaint;
+
+		$scope.submitted = false;
+		complaint.address = "";
+		delete $scope.success;
+		delete complaint.date;
+		delete complaint.time;
+		delete complaint.type;
+		delete complaint.details;
+
+		$scope.addressFocused = true;   // TODO change this with a message
+	};
+
+	// Captcha staff
+	$scope.captchaKey = '6LdUNOYSAAAAANdmj5Ze1eHfzeKHGHcEncmhbLS8';
+	$scope.complaint.response = null;
+	$scope.widgetId = null;
+
+	$scope.setResponse = function (response) {
+		console.info('Response available ' + response);
+		$scope.complaint.response = response;
+	};
+
+	$scope.setWidgetId = function (widgetId) {
+		console.info('Created widget ID: %s', widgetId);
+		$scope.widgetId = widgetId;
+	};
+/*
+	$scope.captcha = grecaptcha.render('g-recaptcha', {
+		'sitekey' : '6LdUNOYSAAAAANdmj5Ze1eHfzeKHGHcEncmhbLS8'
+	});
+*/
+
+		// $('#main-nav-top').outerHeight(true) +
+		// $('#report-instructions').outerHeight(true)
+	$('#report-form-control').affix({
+		offset: {
+			top: 275,
+			xbottom: function() {
+				return (this.bottom = $('.footer').outerHeight(true))
+			}
+		}
+	})
 }]);

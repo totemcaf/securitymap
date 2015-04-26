@@ -9,6 +9,6 @@ angular.module('secMapApp.list', ['ngRoute'])
   });
 }])
 
-.controller('ListCtrl', [function() {
-
+.controller('ListCtrl', ['$scope', 'Complaints', function($scope, Complaints) {
+		$scope.complaints = Complaints.findAll();
 }]);

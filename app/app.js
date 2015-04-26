@@ -9,7 +9,8 @@ angular.module('secMapApp', [
   'secMapApp.list',
   'secMapApp.report',
   'secMapApp.contact',
-  'secMapApp.version'
+  'secMapApp.version',
+  'vcRecaptcha'
 ]).
 config(['$routeProvider', function($routeProvider) {
   $routeProvider.otherwise({redirectTo: '/home'});
@@ -17,7 +18,7 @@ config(['$routeProvider', function($routeProvider) {
 
 .factory('Complaints', ['$resource',
 	function($resource) {
-		return $resource('api/complaints.json?id=:id&filters=:filters&bounds=:bounds',
+		return $resource('api/complaints.php?id=:id&filters=:filters&bounds=:bounds',
 			{id: '@id'},
 			{
 				findAll: {method:'GET', params:{}, isArray:true},

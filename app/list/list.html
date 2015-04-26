@@ -1,5 +1,18 @@
-<p>This is the partial for view 2.</p>
-<p>
-  Showing of 'interpolate' filter:
-  {{ 'Current version is v%VERSION%.' | interpolate }}
-</p>
+<h2>Lista de los siniestros reportados</h2>
+<div class="alert alert-info animate-if" role="alert" ng-if="complaint.length == 0">Vaya, no hay reportes todavía.</div>
+
+<div ng-repeat="complaint in complaints" class="col-md-4">
+	<div class="panel panel-primary">
+		<div class="panel-heading"><img src="images/thieft2.png" class="pull-right"/>{{complaint.date}}</div>
+		<div class="panel-body">
+			<address>
+				<strong>{{complaint.address}}</strong><br/>
+				{{complaint.locality}}<br/>
+				{{complaint.state}}<br/>
+				{{complaint.country}}
+			</address>
+			<div ng-if="complaint.description">{{complaint.description}}</div>
+		</div>
+		<div class="panel-footer text-right">{{complaint.status}}</div>
+	</div>
+</div>
